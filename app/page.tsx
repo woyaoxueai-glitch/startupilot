@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useState } from 'react'; // ✅ 引入 useState
+import { useRef, useState } from 'react';
 import Image from 'next/image'; 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Rocket, Zap, Users, ArrowRight, CheckCircle, ChevronRight, Lock, Globe, X } from 'lucide-react';
+import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { Rocket, Zap, ChevronRight, Lock, Globe, X } from 'lucide-react';
 
 // 动画变体
 const fadeIn = {
@@ -20,10 +20,10 @@ export default function StartupilotHome() {
     offset: ["start end", "end start"]
   });
 
-  // ✅ 新增：控制弹窗状态 (null = 关闭, 'join' = 显示入群码, 'info' = 显示介绍码)
+  // 控制弹窗状态 (null = 关闭, 'join' = 显示入群码, 'info' = 显示介绍码)
   const [activeQR, setActiveQR] = useState<null | 'join' | 'info'>(null);
 
-  // ✅ 新增：关闭弹窗函数
+  // 关闭弹窗函数
   const closeQR = () => setActiveQR(null);
 
   return (
@@ -50,7 +50,6 @@ export default function StartupilotHome() {
             <a href="#features" className="hover:text-[#0071e3] transition-colors">赋能体系</a>
           </div>
 
-          {/* 🔴 红色方框按钮 1：点击显示 qr-1.png */}
           <button 
             onClick={() => setActiveQR('join')}
             className="bg-[#1d1d1f] text-white text-[10px] px-3 py-1 rounded-full hover:bg-[#0071e3] transition-colors duration-300"
@@ -84,8 +83,6 @@ export default function StartupilotHome() {
           </p>
           
           <div className="flex flex-col md:flex-row justify-center gap-6 mt-12">
-            
-            {/* 🔴 红色方框按钮 2：点击显示 qr-1.png */}
             <button 
               onClick={() => setActiveQR('join')}
               className="bg-[#0071e3] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0077ED] transition-colors shadow-lg shadow-blue-500/20"
@@ -93,14 +90,12 @@ export default function StartupilotHome() {
               开启事业加速
             </button>
             
-            {/* 🔴 红色圆圈按钮：点击显示 qr-2.png */}
             <button 
               onClick={() => setActiveQR('info')}
               className="text-[#0071e3] px-8 py-3 text-base font-medium hover:underline underline-offset-4 flex items-center justify-center gap-1"
             >
               了解赋能体系 <ChevronRight className="w-4 h-4" />
             </button>
-
           </div>
         </motion.div>
       </section>
@@ -231,7 +226,7 @@ export default function StartupilotHome() {
         </div>
       </section>
 
-      {/* === 5. 页脚 === */}
+      {/* === 5. 页脚 (已添加公安联网备案) === */}
       <footer className="bg-white pt-20 pb-10 px-6 border-t border-gray-100">
          <div className="max-w-5xl mx-auto text-center">
             
@@ -251,9 +246,13 @@ export default function StartupilotHome() {
             
             <div className="h-px bg-gray-100 w-full mb-10" />
             
-            <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-xs text-gray-400 font-sans">
+            {/* 版权 & 备案信息行 */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-3 md:gap-4 text-xs text-gray-400 font-sans">
                <span>©2025 元核智策（上海）企业管理有限公司</span>
+               
                <span className="hidden md:inline text-gray-300">|</span>
+               
+               {/* ICP 备案 */}
                <a 
                  href="https://beian.miit.gov.cn/" 
                  target="_blank" 
@@ -262,12 +261,27 @@ export default function StartupilotHome() {
                >
                  沪ICP备2025149898号-3
                </a>
+
+               <span className="hidden md:inline text-gray-300">|</span>
+
+               {/* 公安联网备案 (新增) */}
+               <a 
+                  href="https://beian.mps.gov.cn/#/query/webSearch?code=31010402336190" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="flex items-center gap-1 hover:text-[#0071e3] transition-colors"
+               >
+                 {/* 确保 public 下有 beian.png */}
+                 <img src="/beian.png" alt="备案图标" className="w-4 h-4" />
+                 <span>沪公网安备31010402336190号</span>
+               </a>
+
             </div>
 
          </div>
       </footer>
 
-      {/* === 🚀 弹窗组件 (QR Code Modal) === */}
+      {/* === 🚀 弹窗组件 === */}
       <AnimatePresence>
         {activeQR && (
           <motion.div
@@ -276,20 +290,17 @@ export default function StartupilotHome() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center px-4"
           >
-            {/* 背景遮罩 (点击背景关闭) */}
             <div 
               className="absolute inset-0 bg-black/40 backdrop-blur-md"
               onClick={closeQR}
             />
             
-            {/* 弹窗主体 */}
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 10 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 10 }}
               className="bg-white rounded-[24px] p-6 shadow-2xl relative w-full max-w-sm mx-auto z-10"
             >
-              {/* 关闭按钮 */}
               <button 
                 onClick={closeQR}
                 className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors bg-gray-100 rounded-full p-1"
@@ -313,10 +324,8 @@ export default function StartupilotHome() {
                     : '添加顾问微信，获取详细介绍资料'}
                 </p>
 
-                {/* 二维码图片区域 */}
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 inline-block">
                   <Image 
-                    // 根据状态判断显示哪张图
                     src={activeQR === 'join' ? "/qr-1.png" : "/qr-2.png"}
                     alt="QR Code"
                     width={200}
